@@ -1,0 +1,70 @@
+# ─── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# ─── Entornos virtuales ───────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+ENV/
+
+# ─── Empaquetado ──────────────────────────────────────────────────────────────
+*.egg-info/
+dist/
+build/
+*.egg
+MANIFEST
+
+# ─── Herramientas de desarrollo ───────────────────────────────────────────────
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# ─── Jupyter Notebooks ────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+# Los notebooks .ipynb SÍ se versionan (son documentación del proceso de entrenamiento)
+
+# ─── Modelos ML (artefactos binarios pesados) ─────────────────────────────────
+# Los modelos entrenados NO se versionan en git.
+# Se almacenan fuera del repo o en un release de GitHub.
+src/models/*.pkl
+src/models/*.joblib
+ml-training/models/*.pkl
+ml-training/models/*.joblib
+# Excepción: mantener el archivo placeholder .gitkeep
+!src/models/.gitkeep
+
+# ─── Datasets (archivos grandes) ──────────────────────────────────────────────
+ml-training/data/raw/
+ml-training/data/our-pilot/
+ml-training/data/processed/
+# Excepción: mantener estructura de carpetas
+!ml-training/data/raw/.gitkeep
+!ml-training/data/our-pilot/.gitkeep
+!ml-training/data/processed/.gitkeep
+
+# ─── Variables de entorno ─────────────────────────────────────────────────────
+.env
+.env.local
+.env.production
+
+# ─── Editores ─────────────────────────────────────────────────────────────────
+.vscode/
+*.code-workspace
+.idea/
+
+# ─── Sistema operativo ────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── Claude Code (herramienta interna, no va al repo público) ────────────────
+CLAUDE.md
+
+# ─── Logs ─────────────────────────────────────────────────────────────────────
+*.log
