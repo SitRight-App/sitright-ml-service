@@ -40,9 +40,9 @@ ml-training/models/*.joblib
 !src/models/.gitkeep
 
 # ─── Datasets (archivos grandes) ──────────────────────────────────────────────
-ml-training/data/raw/
-ml-training/data/our-pilot/
-ml-training/data/processed/
+ml-training/data/raw/*
+ml-training/data/our-pilot/*
+ml-training/data/processed/*
 # Excepción: mantener estructura de carpetas
 !ml-training/data/raw/.gitkeep
 !ml-training/data/our-pilot/.gitkeep
