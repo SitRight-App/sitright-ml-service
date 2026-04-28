@@ -10,7 +10,7 @@ Tests de criterios de aceptación:
 import pytest
 from fastapi.testclient import TestClient
 
-from src.api.routes import get_classifier, set_classifier
+from src.api.routes import set_classifier
 from src.main import app
 
 
