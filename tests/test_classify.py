@@ -20,9 +20,12 @@ class _MockClassifier:
 
     def predict(self, features: list[float]) -> tuple[str, float]:
         az = features[2]
-        if az > 8.0:   return ("adequate", 0.95)
-        if az > 2.0:   return ("forward_slouch", 0.88)
-        if az < -2.0:  return ("excessive_recline", 0.80)
+        if az > 8.0:
+            return ("adequate", 0.95)
+        if az > 2.0:
+            return ("forward_slouch", 0.88)
+        if az < -2.0:
+            return ("excessive_recline", 0.80)
         return ("indeterminate", 0.30)  # confianza < threshold → indeterminate
 
 
