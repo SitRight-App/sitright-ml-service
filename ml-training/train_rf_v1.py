@@ -21,7 +21,11 @@ PROCESSED_DIR = BASE / "data/processed"
 OUTPUT_PATH = BASE / "../src/models/rf_v1.pkl"
 
 CLASS_NAMES = {0: "adequate", 1: "forward_slouch", 2: "excessive_recline"}
-LABEL_MAP = {2.0: 0, 4.0: 1, 5.0: 2}  # dataset → sitright
+# dataset → sitright. Mapeo de labels del Human-Posture-Dataset a las 3 clases
+# del ADR-004: sitting(0)→adequate, forward bending(2)→forward_slouch,
+# backward bending(3)→excessive_recline. Se descartan standing(1), sleeping(4),
+# running(5) por estar fuera del alcance postural sedentario.
+LABEL_MAP = {0.0: 0, 2.0: 1, 3.0: 2}
 
 # ── 1. Carga ──────────────────────────────────────────────────────────────────
 print("1. Cargando dataset...")
@@ -116,10 +120,12 @@ print(f"   Tamaño real: {real_size_mb:.2f} MB")
 # ── 8. Smoke test ─────────────────────────────────────────────────────────────
 print("\n6. Smoke test...")
 loaded = joblib.load(OUTPUT_PATH)
+# Valores en g (el dataset y el firmware reportan en g, no en m/s²).
+# Referencias: medias de cada clase en el dataset filtrado.
 test_cases = [
-    ([0.05, 9.8, 0.1], "adequate"),
-    ([0.3, 7.5, 2.1], "forward_slouch"),
-    ([-0.2, 6.0, -3.5], "excessive_recline"),
+    ([0.06, -0.12, 0.95], "adequate"),
+    ([-0.92, 0.00, 0.05], "forward_slouch"),
+    ([-0.85, 0.25, -0.10], "excessive_recline"),
 ]
 for features, expected in test_cases:
     proba = loaded["model"].predict_proba([features])[0]
