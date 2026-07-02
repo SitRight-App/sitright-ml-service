@@ -5,7 +5,7 @@ Tests de criterios de aceptación:
   HU-04 Unhappy: modelo no cargado → 503
   HU-05 Happy : sensor dorsal inclinado adelante → forward_slouch
   HU-05 Happy : sensor dorsal inclinado atrás → excessive_recline
-  HU-05 Unhappy: datos ambiguos → indeterminate (confianza < 0.5)
+  HU-05 Unhappy: datos ambiguos → indeterminate (confianza < 0.70)
 """
 import pytest
 from fastapi.testclient import TestClient
@@ -94,7 +94,7 @@ def test_hu05_identifica_reclinacion_excesiva(client):
     assert response.json()["class"] == "excessive_recline"
 
 
-# Unhappy: datos ambiguos → indeterminate (confianza < 0.5 en el mock)
+# Unhappy: datos ambiguos → indeterminate (confianza < 0.70 en el mock)
 def test_hu05_datos_ambiguos_devuelven_indeterminate(client):
     body = {**VALID_BODY, "dorsal": [0.0, 0.0, 0.5]}  # az ≈ 0 → indeterminate (conf 0.30)
     response = client.post("/ml/classify", json=body)

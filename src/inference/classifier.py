@@ -4,7 +4,7 @@ from pathlib import Path
 
 class PostureClassifier:
     MODEL_VERSION = "rf_v1"
-    CONFIDENCE_THRESHOLD = 0.5
+    CONFIDENCE_THRESHOLD = 0.70
 
     def __init__(self, model_path: Path) -> None:
         bundle = joblib.load(model_path)
