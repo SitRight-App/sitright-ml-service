@@ -4,8 +4,8 @@ from pathlib import Path
 
 from fastapi import FastAPI
 
-from .api.routes import router, set_classifier
-from .inference.classifier import PostureClassifier
+from .api.routes import router, set_calibrated_classifier, set_classifier
+from .inference.classifier import CalibratedClassifier, PostureClassifier
 
 
 @asynccontextmanager
@@ -17,6 +17,7 @@ async def lifespan(app: FastAPI):
             "Run ml-training/notebooks/04-export.ipynb to generate it."
         )
     set_classifier(PostureClassifier(model_path))
+    set_calibrated_classifier(CalibratedClassifier())
     yield
 
 

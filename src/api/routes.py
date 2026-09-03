@@ -3,17 +3,25 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
-from ..inference.classifier import PostureClassifier
+from ..inference.classifier import CalibratedClassifier, PostureClassifier
 from ..inference.feature_extraction import extract_dorsal_features
 
 router = APIRouter(prefix="/ml", tags=["ml"])
 
 _classifier: PostureClassifier | None = None
+_calibrated: CalibratedClassifier | None = None
+
+ZONES = ("cervical", "dorsal", "lumbar")
 
 
 def set_classifier(classifier: PostureClassifier) -> None:
     global _classifier
     _classifier = classifier
+
+
+def set_calibrated_classifier(classifier: CalibratedClassifier) -> None:
+    global _calibrated
+    _calibrated = classifier
 
 
 def get_classifier() -> PostureClassifier:
@@ -42,12 +50,19 @@ async def classify_posture(
     request: ClassifyRequest,
     classifier: Annotated[PostureClassifier, Depends(get_classifier)],
 ) -> ClassifyResponse:
-    features = extract_dorsal_features(request.dorsal)
-    posture_class, confidence = classifier.predict(features)
+    ref = request.reference
+    if _calibrated is not None and ref and all(z in ref for z in ZONES):
+        current = {"cervical": request.cervical, "dorsal": request.dorsal, "lumbar": request.lumbar}
+        posture_class, confidence = _calibrated.predict(current, ref)
+        version = CalibratedClassifier.MODEL_VERSION
+    else:
+        features = extract_dorsal_features(request.dorsal)
+        posture_class, confidence = classifier.predict(features)
+        version = PostureClassifier.MODEL_VERSION
     return ClassifyResponse(
         class_=posture_class,
         confidence=confidence,
-        model_version=PostureClassifier.MODEL_VERSION,
+        model_version=version,
     )
 
 
